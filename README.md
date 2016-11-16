@@ -34,3 +34,7 @@ Java后端常用工具类、缓存接口封装、消息队列接口封装。
     ①redis常用API接口(RedisUtil)
 
     ②基于redis实现分布式锁(RedisLockUtil)
+
+
+QQ:208275451
+邮箱：yangzhao_java@163.com
