@@ -25,13 +25,12 @@ public class JMessageQueue implements IMessageQueue {
     @Override
     public synchronized boolean publish (String channel, Object o){
         ArrayBlockingQueue queue = map.get(channel);
-        boolean add = false;
         if (queue == null){
             queue = new ArrayBlockingQueue(Constant.BLOCKINGQUEUE_SIZE,true);
         }
         queue.add(o);
-        map.put(channel,queue);
-        return add;
+        map.put(channel, queue);
+        return true;
     }
     /**
      * 获取并移除此队列的头部，在元素变得可用之前一直等待（如果有必要）。
