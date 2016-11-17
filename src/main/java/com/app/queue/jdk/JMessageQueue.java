@@ -9,7 +9,7 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * 基于JDK实现消息队列
+ * 基于ArrayBlockingQueue实现消息队列
  * Created by yangzhao on 16/8/28.
  */
 @Component
@@ -40,12 +40,16 @@ public class JMessageQueue implements IMessageQueue {
     @Override
     public synchronized void subscribe(String channel, QueueHandler queueHandler) {
         ArrayBlockingQueue queue = map.get(channel);
-
+        if (queue==null){
+            queue = new ArrayBlockingQueue(Constant.BLOCKINGQUEUE_SIZE,true);
+            map.put(channel,queue);
+        }
+        final ArrayBlockingQueue abq = queue;
         new Thread(()->{
             while (true){
                 Object take = null;
                 try {
-                    take = queue.take();
+                    take = abq.take();
                     queueHandler.responseData(JsonUtil.parse(take));
                 } catch (InterruptedException e) {
                     e.printStackTrace();
