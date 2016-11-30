@@ -4,8 +4,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.util.Arrays;
-import com.app.constants.Constant;
-import com.app.constants.ResourceConstant;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.web.multipart.MultipartFile;
@@ -23,7 +21,7 @@ public class FileUploadUtil {
 
 	/**
 	 * 使用springmvc组件处理文件上传
-	 * @param files
+	 * @param file
 	 */
 	public static String fileUpload(MultipartFile file,String path) {
 		try {
@@ -43,7 +41,7 @@ public class FileUploadUtil {
 
 	/**
 	 * 字节流保存上传图片
-	 * @param is
+	 * @param data
 	 * @param path
 	 * @return
 	 */
@@ -83,16 +81,10 @@ public class FileUploadUtil {
 	 * @return
 	 */
 	public static boolean validateFileType(String fileType){
-		String allowFileType = Constant.ALLOW_FILE_TYPE;
-		String[] split = allowFileType.split(",");
-		int status=0;
-		for (String type:split) {
+		for (String type:FILE_EXTS) {
 			if (type.equalsIgnoreCase(fileType)){
-				status=1;
+				return true;
 			}
-		}
-		if (status==1){
-			return true;
 		}
 		return false;
 	}

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
  * 基于redis实现消息队列
  * Created by yangzhao on 16/11/14.
  */
-@Component
+@Component("rMessageQueue")
 public class RMessageQueue implements IMessageQueue {
     @Override
     public boolean publish(String channel, Object o) {

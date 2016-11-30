@@ -1,7 +1,7 @@
 package com.app.cache;
 
-import com.app.constants.Constant;
 
+import com.app.config.Constant;
 
 /**
  * 缓存工厂类

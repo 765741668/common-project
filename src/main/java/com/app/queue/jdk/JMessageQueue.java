@@ -1,6 +1,6 @@
 package com.app.queue.jdk;
 
-import com.app.constants.Constant;
+import com.app.config.Constant;
 import com.app.queue.IMessageQueue;
 import com.app.queue.QueueHandler;
 import com.app.utils.JsonUtil;
@@ -12,7 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * 基于ArrayBlockingQueue实现消息队列
  * Created by yangzhao on 16/8/28.
  */
-@Component
+@Component("jMessageQueue")
 public class JMessageQueue implements IMessageQueue {
 
     private final ConcurrentHashMap<String,ArrayBlockingQueue> map = new ConcurrentHashMap();

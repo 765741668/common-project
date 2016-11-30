@@ -1,7 +1,6 @@
 package com.app.utils;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import org.apache.http.NameValuePair;
@@ -10,8 +9,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import com.app.cache.CacheFactory;
 import com.app.cache.ICache;
-import com.app.constants.CacheConstant;
-import com.app.constants.ErrorInfo;
 import com.app.security.MD5Util;
 /**
  * 短信服务商（互亿无线）
@@ -54,14 +51,14 @@ public class SmsUtil {
 	 */
 	public static String validateSmsCode(String phone,int code){
 		ICache cache = CacheFactory.getInstance().getDefault();
-		String s = cache.get(CacheConstant.SMS_MODEL + phone);
+		String s = cache.get("sms_model" + phone);
 		//判断验证码是否超时（失效）
 		if (StringUtils.isEmpty(s)){
-			return MessageUtil.getErrorMessage(ErrorInfo.sms_code_invalid);
+			return "";
 		}
 		//判断验证码是否正确
 		if(code!=Integer.parseInt(s)){
-			return MessageUtil.getErrorMessage(ErrorInfo.sms_code_error);
+			return "";
 		}
 		return "ok";
 	}

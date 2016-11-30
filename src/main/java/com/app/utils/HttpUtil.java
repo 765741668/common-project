@@ -13,6 +13,7 @@ import java.util.Set;
 import javax.net.ssl.SSLContext;
 import javax.servlet.http.HttpServletRequest;
 
+import com.app.config.Constant;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -32,7 +33,6 @@ import org.apache.http.ssl.SSLContexts;
 import org.apache.http.util.EntityUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import com.app.constants.Constant;
 
 /**
  * http常用处理工具类
@@ -63,7 +63,7 @@ public class HttpUtil {
 			HttpGet request = new HttpGet(url);
 			HttpResponse response = client.execute(request);
 			HttpEntity entity =  response.getEntity();
-			String result = EntityUtils.toString(entity,Constant.DEFAULT_CHARSET_NAME);
+			String result = EntityUtils.toString(entity, Constant.DEFAULT_CHARSET_NAME);
 			return result;
 		} catch (Exception e) {
 			logger.error("http req error", e);

@@ -3,8 +3,8 @@ package com.app.pay;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.*;
-import com.app.constants.Constant;
-import com.app.constants.ResourceConstant;
+
+import com.app.config.Constant;
 import com.app.security.RSAUtil;
 import com.app.utils.DateUtils;
 import com.app.utils.HttpUtil;
@@ -23,7 +23,7 @@ public class AliPay implements IPay {
 		params.put("service", "refund_fastpay_by_platform_pwd");
 		params.put("partner", AlipayUtil.privateKey);
 		params.put("_input_charset", Constant.DEFAULT_CHARSET_NAME);
-		params.put("notify_url", ResourceConstant.SERVER_URL+AlipayUtil.refund_notify_url);
+		params.put("notify_url", Constant.SERVER_URL+AlipayUtil.refund_notify_url);
 		params.put("seller_email",AlipayUtil.seller);
 		params.put("seller_user_id", "");
 		params.put("refund_date", DateUtils.FormatFullDate(new Date()));
@@ -54,7 +54,7 @@ public class AliPay implements IPay {
 		map.put("service", "mobile.securitypay.pay");
 		map.put("partner", AlipayUtil.partner);
 		map.put("_input_charset", Constant.DEFAULT_CHARSET_NAME);
-		map.put("notify_url", ResourceConstant.SERVER_URL+AlipayUtil.pay_notify_url);
+		map.put("notify_url", Constant.SERVER_URL+AlipayUtil.pay_notify_url);
 		map.put("out_trade_no", "");
 		map.put("subject", "");
 		map.put("payment_type", "1");

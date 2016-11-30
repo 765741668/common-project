@@ -22,9 +22,17 @@
   	</repository>
   </repositories>
 
+	<!-- 发布jar包到nexus -->
+	<distributionManagement>
+		<snapshotRepository>
+			<id>snapshots</id>
+			<url>http://192.168.1.190/nexus/content/repositories/snapshots</url>
+		</snapshotRepository>
+	</distributionManagement>
+
   <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <org.springframework.version>4.2.3.RELEASE</org.springframework.version>
+      <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+      <org.springframework.version>4.2.3.RELEASE</org.springframework.version>
   </properties>
 
   <dependencies>
@@ -40,7 +48,7 @@
 		  <groupId>javax.servlet</groupId>
 		  <artifactId>javax.servlet-api</artifactId>
 		  <version>3.1.0</version>
-		  <scope>test</scope>
+		  <scope>provided</scope>
 	  </dependency>
 
 	  <dependency>
@@ -115,11 +123,6 @@
 		<artifactId>dom4j</artifactId>
 		<version>1.6.1</version>
 	</dependency>
-	  <dependency>
-		  <groupId>javax.servlet</groupId>
-		  <artifactId>javax.servlet-api</artifactId>
-		  <version>RELEASE</version>
-	  </dependency>
 
   </dependencies>
   
@@ -128,9 +131,10 @@
   	<plugins>
   		<plugin>
   			<groupId>org.apache.maven.plugins</groupId>  
-	        <artifactId>maven-compiler-plugin</artifactId>  
-	        <configuration>  
-	          <source>1.8</source>  
+	        <artifactId>maven-compiler-plugin</artifactId>
+			<version>3.0</version>
+	        <configuration>
+	          <source>1.8</source>
 	          <target>1.8</target>
 				<encoding>UTF-8</encoding>
 				<compilerArguments>
@@ -139,6 +143,21 @@
 				</compilerArguments>
 			</configuration>
   		</plugin>
+		<!-- 打包源码 -->
+		<plugin>
+			 <groupId>org.apache.maven.plugins</groupId>
+			 <artifactId>maven-source-plugin</artifactId>
+			<version>2.1.2</version>
+			 <executions>
+				 <execution>
+					 <id>attach-sources</id>
+					 <phase>verify</phase>
+					 <goals>
+						 <goal>jar</goal>
+					 </goals>
+				 </execution>
+			 </executions>
+		 </plugin>
   	</plugins>
   </build>
 </project>

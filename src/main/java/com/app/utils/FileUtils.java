@@ -10,6 +10,7 @@ import org.apache.logging.log4j.Logger;
 import javax.imageio.ImageIO;
 
 public class FileUtils extends org.apache.commons.io.FileUtils {
+
 	private static final Logger logger=LogManager.getLogger(FileUtils.class);
 
 	/**
@@ -153,5 +154,17 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	/**
+	 * 修改文件名称
+	 * @param path
+	 * @param newFileName
+	 */
+	public static void updateName(String path,String newFileName){
+		File oldFile = new File(path);
+		String parent = oldFile.getParent();
+		File newFile = new File(parent+"/"+newFileName);
+		oldFile.renameTo(newFile);
 	}
 }

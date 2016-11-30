@@ -8,7 +8,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import com.app.constants.Constant;
+
+import com.app.config.Constant;
 import com.app.enums.OrderStatus;
 import com.app.security.MD5Util;
 import com.app.utils.DateUtils;

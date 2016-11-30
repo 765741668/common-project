@@ -6,10 +6,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import com.app.constants.ResourceConstant;
+import com.app.config.Constant;
 import org.apache.http.NameValuePair;
-
-import com.app.constants.Constant;
 import com.app.security.MD5Util;
 
 public class WXPayUtil {

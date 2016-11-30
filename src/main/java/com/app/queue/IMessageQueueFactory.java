@@ -9,7 +9,7 @@ import javax.annotation.Resource;
 /**
  * Created by yangzhao on 16/8/28.
  */
-@Component
+@Component("iMessageQueueFactory")
 public class IMessageQueueFactory {
 
     @Resource(name = "jMessageQueue")
