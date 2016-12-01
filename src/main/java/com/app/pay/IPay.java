@@ -20,4 +20,11 @@ public interface IPay {
 	 */
 	@SuppressWarnings("rawtypes")
 	public Object createPayParams(Object order);
+
+	/**
+	 * 订单查询
+	 * @param orderId
+	 * @return
+	 */
+	public Object queryOrder(String orderId);
 }

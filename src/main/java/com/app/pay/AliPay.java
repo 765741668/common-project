@@ -84,4 +84,33 @@ public class AliPay implements IPay {
 		payParams = stringBuilder.toString();
 		return payParams;
 	}
+
+	@Override
+	public String queryOrder(String orderId) {
+		Map map = new HashMap();
+		map.put("app_id",AlipayUtil.application_app_id);
+		map.put("method","alipay.trade.query");
+		map.put("charset","utf-8");
+		map.put("sign_type",AlipayUtil.sign_type);
+		map.put("timestamp",DateUtils.FormatFullDate(new Date()));
+		map.put("version","1.0");
+		map.put("biz_content", "{\"out_trade_no\":\""+orderId+"\"}");
+		Map paraFilter = AlipayUtil.paraFilter(map);
+		String linkString = AlipayUtil.createLinkString(paraFilter);
+		String sign = AlipayUtil.sign(linkString, AlipayUtil.application_privateKey, "utf-8");
+		map.put("sign",sign);
+		Set set = map.keySet();
+		Iterator iterator = set.iterator();
+		StringBuilder stringBuilder = new StringBuilder();
+		while (iterator.hasNext()){
+			String key = iterator.next().toString();
+			String value = map.get(key).toString();
+			stringBuilder.append(key+"="+URLEncoder.encode(value)+"&");
+
+		}
+		String params = stringBuilder.toString();
+		params = params.substring(0,params.length()-1);
+		String request = HttpUtil.getRequest(AlipayUtil.order_query_url + params);
+		return request;
+	}
 }

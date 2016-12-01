@@ -36,14 +36,20 @@ public class AlipayUtil {
 	public static final String partner = "";
 
 	public static final String key = "";
-
+	//支付宝应用2.0签约appid
 	public static final String app_id = "";
+	//自己创建应用的appid
+	public static final String application_app_id = "";
 	// 签名方式
 	public static final String sign_type = "RSA";
-
-	public static final String privateKey = "";
-
+	//支付宝应用2.0签约设置的公钥
 	public static final String publicKey = "";
+	//支付宝应用2.0签约设置的私钥
+	public static final String privateKey = "";
+	//自己创建应用的公钥
+	public static final String application_publicKey = "";
+	//自己创建应用的私钥
+	public static final String application_privateKey = "";
 
 	public static final String seller = "";
 	//支付回调
@@ -52,6 +58,8 @@ public class AlipayUtil {
 	public static final String refund_notify_url = "";
 
 	public static final String refund_url = "https://mapi.alipay.com/gateway.do?";
+	//支付宝订单查询
+	public static final String order_query_url = "https://openapi.alipay.com/gateway.do?";
 
 	public static final String SIGN_ALGORITHMS = "SHA1WithRSA";
 

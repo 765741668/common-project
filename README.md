@@ -3,7 +3,7 @@ Java后端常用工具类、缓存接口封装、消息队列接口封装。
 
 1.缓存接口介绍(com.app.cache)：
 
-    ① 基于JVM本地方法区数据缓存
+    ① 基于JVM方法区数据缓存
 
     ② 基于redis进行数据缓存
 
@@ -13,7 +13,7 @@ Java后端常用工具类、缓存接口封装、消息队列接口封装。
 
     ② 基于redis 发布订阅实现消息队列
 
-  ▲ 后期会维护kafka
+  ▲ 后期会维护kafka和阿里巴巴RocketMQ
 
 3.常用工具类(com.app.utils)
 
@@ -35,6 +35,17 @@ Java后端常用工具类、缓存接口封装、消息队列接口封装。
 
     ②基于redis实现分布式锁(RedisLockUtil)
 
+5.微信、支付宝支付（com.app.pay包下）
+
+    使用PayFactory工厂类统一管理
+
+    ①创建订单（createOrder）
+    
+    ②退款(refund）
+    
+    ③生成移动端调起微信和支付宝时所需要的参数（createPayParams）
+    
+    ④订单查询（queryOrder）
 
 QQ:208275451
 邮箱：yangzhao_java@163.com
