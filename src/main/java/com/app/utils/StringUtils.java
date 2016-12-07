@@ -1,5 +1,8 @@
 package com.app.utils;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class StringUtils extends org.springframework.util.StringUtils {
 	public static int isAcronym(String word)
 	 {
@@ -62,5 +65,20 @@ public class StringUtils extends org.springframework.util.StringUtils {
 		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.append(chars.substring(0,1).toUpperCase()).append(chars.substring(1));
 		return stringBuilder.toString();
+	}
+
+	/**
+	 * 判断一个字符串是否含有中文
+	 * @param str
+	 * @return
+	 */
+	public static boolean isContainChinese(String str) {
+
+		Pattern p = Pattern.compile("[\u4e00-\u9fa5]");
+		Matcher m = p.matcher(str);
+		if (m.find()) {
+			return true;
+		}
+		return false;
 	}
 }
