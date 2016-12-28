@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.util.Arrays;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,6 +26,10 @@ public class FileUploadUtil {
 	 */
 	public static String fileUpload(MultipartFile file,String path) {
 		try {
+			File f = new File(path);
+			if (!f.exists()){
+				f.mkdirs();
+			}
 			String fileName=file.getOriginalFilename();
 			String fileType = fileName.substring(fileName.lastIndexOf(".") + 1);
 			fileName=UUIDUtil.getUUID()+"."+fileType;
@@ -45,9 +50,13 @@ public class FileUploadUtil {
 	 * @param path
 	 * @return
 	 */
-	public static boolean byteUpload(byte[] data, String path) {
+	public static boolean byteUpload(byte[] data, String path,String fileName) {
 		boolean flag = false;
 		File file = new File(path);
+		if (!file.exists()){
+			file.mkdirs();
+		}
+		file = new File(path+fileName);
 		try {
 			OutputStream os = new FileOutputStream(file);
 			os.write(data);
