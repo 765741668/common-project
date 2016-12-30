@@ -647,4 +647,17 @@ public class DateUtils {
 		gc.add(Calendar.MINUTE, minute);
 		return gc.getTime();
 	}
+
+	/**
+	 * 获取nowDate时间的月份差
+	 * @param nowDate
+	 * @param month
+	 * @return
+	 */
+	public static Date timeDifferenceForMonth(Date nowDate,int month){
+		Calendar calendar = Calendar.getInstance();//日历对象
+		calendar.setTime(nowDate);
+		calendar.add(Calendar.MONTH, month);
+		return calendar.getTime();
+	}
 }
