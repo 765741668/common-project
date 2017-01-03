@@ -21,7 +21,7 @@ public class IPUtil {
      * @return
      */
     public static Map query(String ip){
-        String request = HttpUtil.getRequest(TAOBAO_API+ip);
+        String request = HttpUtil.getRequest(SINA_API+ip);
         HashMap responseData = JsonUtil.parse(request, HashMap.class);
         Set set = responseData.keySet();
         Iterator iterator = set.iterator();
