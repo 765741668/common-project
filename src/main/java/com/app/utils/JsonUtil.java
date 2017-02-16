@@ -3,13 +3,12 @@ package com.app.utils;
 import java.io.IOException;
 import java.util.Collection;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import com.fasterxml.jackson.core.JsonParser.Feature;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.MapperFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * json工具类
@@ -31,7 +30,15 @@ public class JsonUtil {
 		
 		objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true);
 		//jackson 实体转json为NULL或者为空不参加序列化
-		objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+//		objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+
+		//jackson实体转json为null时修改null值为""
+		objectMapper.getSerializerProvider().setNullValueSerializer(new JsonSerializer<Object>() {
+			@Override
+			public void serialize(Object o, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException, JsonProcessingException {
+				jsonGenerator.writeString("");
+			}
+		});
 	}
 
 	/**
