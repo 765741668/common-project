@@ -7,6 +7,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
+
 import com.app.redis.RedisUtil;
 import com.app.utils.JsonUtil;
 import com.app.utils.StringUtils;
@@ -106,6 +108,16 @@ public class RedisCache implements ICache {
 	}
 
 	@Override
+	public <T> List<T> hashGet(String mname, String [] keys, Class<T> clazz) {
+		List<String> data = RedisUtil.getInstance().hmget(mname, keys);
+		List<T> collect = data.stream().map(d -> {
+			T parse = JsonUtil.parse(d, clazz);
+			return parse;
+		}).collect(Collectors.toList());
+		return collect;
+	}
+
+	@Override
 	public Map<String, Object> hashGet(String mname) {
 		Map<String, String> hget = RedisUtil.getInstance().hget(mname);
 		if(hget.isEmpty()){
@@ -154,11 +166,6 @@ public class RedisCache implements ICache {
 		if(list.isEmpty()){
 			return null;
 		}
-//		List<T> dataList=new ArrayList<T>();
-//		list.forEach((data)->{
-//			T parse = JsonUtil.parse(data, clazz);
-//			dataList.add(parse);
-//		});
 		ArrayList<T> objects = list.stream().map(t -> JsonUtil.parse(t, clazz))
 				.collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
 		return objects;

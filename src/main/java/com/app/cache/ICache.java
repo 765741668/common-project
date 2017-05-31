@@ -95,6 +95,16 @@ public interface ICache {
 	public String hashGet(String mname, String key);
 
 	/**
+	 * 返回哈希表key中一个或多个给定域的值。
+	 * @param mname
+	 * @param keys
+	 * @param clazz
+	 * @param <T>
+	 * @return
+	 */
+	public <T> List<T> hashGet(String mname, String [] keys, Class<T> clazz);
+
+	/**
 	 * 得到所有数据
 	 * 
 	 * @param mname

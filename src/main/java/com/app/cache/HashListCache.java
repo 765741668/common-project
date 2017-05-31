@@ -81,6 +81,11 @@ public class HashListCache implements ICache {
 	}
 
 	@Override
+	public <T> List<T> hashGet(String mname,String [] keys, Class<T> clazz) {
+		return null;
+	}
+
+	@Override
 	public Map<String, Object> hashGet(String mname) {
 		Map<String, Object> map = bigMapMap.get(mname);
 		if (map == null) {

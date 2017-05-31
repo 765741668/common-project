@@ -31,6 +31,7 @@ public class FileUploadUtil {
 				f.mkdirs();
 			}
 			String fileName=file.getOriginalFilename();
+			logger.info("上传文件名称："+fileName);
 			String fileType = fileName.substring(fileName.lastIndexOf(".") + 1);
 			fileName=UUIDUtil.getUUID()+"."+fileType;
 			 // 文件保存路径  

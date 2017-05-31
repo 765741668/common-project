@@ -282,10 +282,11 @@ public class RedisUtil {
 	 * @param key
 	 * @param fields
 	 */
-	public void hmget(String key, String... fields) {
+	public List<String> hmget(String key, String... fields) {
 		Jedis jedis = this.getJedis();
 		List<String> hmget = jedis.hmget(key, fields);
 		jedis.close();
+		return hmget;
 	}
 
 	public Map<String, String> hget(String key) {
