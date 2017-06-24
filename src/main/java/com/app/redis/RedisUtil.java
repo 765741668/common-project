@@ -1,7 +1,9 @@
 package com.app.redis;
 
+import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 import com.app.queue.QueueHandler;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
@@ -52,14 +54,18 @@ public class RedisUtil {
 	 */
 	public RedisUtil() {
 		try {
-			GenericObjectPoolConfig config = new GenericObjectPoolConfig();
-			String host = FileUtils.getPropertiesValue("/redis.properties", "redis.host");
-			String password = FileUtils.getPropertiesValue("/redis.properties", "redis.password");
-			int port = Integer.parseInt(FileUtils.getPropertiesValue("/redis.properties", "redis.port"));
-			pool = new JedisPool(config, host, port, TIMEOUT, password);
+			GenericObjectPoolConfig e = new GenericObjectPoolConfig();
+			Properties property = new Properties();
+			InputStream is = FileUtils.class.getResourceAsStream("/redis.properties");
+			property.load(is);
+			String host = property.getProperty("redis.host");
+			String password = property.getProperty("redis.password");
+			int port = Integer.parseInt(property.getProperty("redis.port"));
+			is.close();
+			this.pool = new JedisPool(e, host, port, TIMEOUT, password);
 			int dataBase = Integer.parseInt(FileUtils.getPropertiesValue("/redis.properties", "redis.database"));
 			this.dataBase = dataBase;
-			logger.info("----开启redis缓存(数据库为："+dataBase+")");
+			logger.info("----开启redis缓存(数据库为：" + dataBase + ")");
 		} catch (Exception e) {
 			logger.error("redis初始化失败");
 		}
