@@ -1,29 +1,24 @@
 package com.app.security;
 
-import java.io.UnsupportedEncodingException;
-import java.security.Security;
-import java.util.ArrayList;
-import java.util.stream.Stream;
+import com.hmhbt.common.util.SecurityUtil;
+
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
+import java.security.Security;
 
-public class AES {
+public class AES implements ISecurity {
 
-	private static String sKey = "";
+	private static String sKey = "B31F2A75FBF94099";
 
 	private static final String ALGORITHM = "AES/ECB/PKCS7Padding";
 
 	private static byte[] raw = null;
 
+	private final ISecurity base64 = SecurityUtil.getBase64();
+
 	static {
 		Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
 		try {
-//			KeyGenerator kgen = KeyGenerator.getInstance("AES");
-//			SecureRandom sr = SecureRandom.getInstance("SHA1PRNG");
-//			sr.setSeed(sKey.getBytes());
-//			kgen.init(128, sr);
-//			SecretKey secret = kgen.generateKey();
-//			raw = secret.getEncoded();
 			raw = sKey.getBytes();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -37,17 +32,14 @@ public class AES {
 	 * @return
 	 * @throws Exception
 	 */
-	public static String Encrypt(String data) {
+	@Override
+	public String Encrypt(String data) throws Exception {
 		byte[] encrypted=null;
-		try{
-			SecretKeySpec skeySpec = new SecretKeySpec(raw, "AES");
-			Cipher cipher = Cipher.getInstance(ALGORITHM, "BC");//"算法/模式/补码方式"
-			cipher.init(Cipher.ENCRYPT_MODE, skeySpec);
-			encrypted = cipher.doFinal(data.getBytes("utf-8"));
-		}catch(Exception e){
-			e.printStackTrace();
-		}
-		return Base64.encode(encrypted);//此处使用BASE64做转码功能，同时能起到2次加密的作用。
+		SecretKeySpec skeySpec = new SecretKeySpec(raw, "AES");
+		Cipher cipher = Cipher.getInstance(ALGORITHM, "BC");//"算法/模式/补码方式"
+		cipher.init(Cipher.ENCRYPT_MODE, skeySpec);
+		encrypted = cipher.doFinal(data.getBytes("utf-8"));
+		return base64.Encrypt(new String(encrypted));//此处使用BASE64做转码功能，同时能起到2次加密的作用。
 	}
 
 	/**
@@ -56,13 +48,20 @@ public class AES {
 	 * @return
 	 * @throws Exception
 	 */
-	public static String Decrypt(String data) throws Exception {
+	@Override
+	public String Decrypt(String data) throws Exception {
 		SecretKeySpec skeySpec = new SecretKeySpec(raw, "AES");
 		Cipher cipher = Cipher.getInstance(ALGORITHM, "BC");
 		cipher.init(Cipher.DECRYPT_MODE, skeySpec);
-		byte[] encrypted1 = Base64.decode(data);//先用base64解密
+		String decrypt = base64.Decrypt(data);//先用base64解密
+		byte[] encrypted1 = decrypt.getBytes("UTF-8");
 		byte[] original = cipher.doFinal(encrypted1);
 		String originalString = new String(original, "utf-8");
 		return originalString;
+	}
+
+	@Override
+	public String Sign(String content, String privateKey) throws Exception {
+		return null;
 	}
 }

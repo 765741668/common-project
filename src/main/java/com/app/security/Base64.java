@@ -1,6 +1,11 @@
 package com.app.security;
 
-public final class Base64 {
+/**
+ * Base64编码工具
+ * @author yangzhao
+ * CREATE BY 2017-07-20
+ */
+public final class Base64 implements ISecurity {
 
     static private final int     BASELENGTH           = 128;
     static private final int     LOOKUPLENGTH         = 64;
@@ -60,14 +65,9 @@ public final class Base64 {
         return (octect < BASELENGTH && base64Alphabet[octect] != -1);
     }
 
-    /**
-     * Encodes hex octects into Base64
-     *
-     * @param binaryData Array containing binaryData
-     * @return Encoded Base64 array
-     */
-    public static String encode(byte[] binaryData) {
-
+    @Override
+    public String Encrypt(String data) throws Exception {
+        byte[] binaryData = data.getBytes("UTF-8");
         if (binaryData == null) {
             return null;
         }
@@ -157,7 +157,7 @@ public final class Base64 {
      * @param encoded string containing Base64 data
      * @return Array containind decoded data.
      */
-    public static byte[] decode(String encoded) {
+    public String Decrypt(String encoded) throws Exception {
 
         if (encoded == null) {
             return null;
@@ -174,7 +174,7 @@ public final class Base64 {
         int numberQuadruple = (len / FOURBYTE);
 
         if (numberQuadruple == 0) {
-            return new byte[0];
+            return null;
         }
 
         byte decodedData[] = null;
@@ -222,7 +222,7 @@ public final class Base64 {
                 byte[] tmp = new byte[i * 3 + 1];
                 System.arraycopy(decodedData, 0, tmp, 0, i * 3);
                 tmp[encodedIndex] = (byte) (b1 << 2 | b2 >> 4);
-                return tmp;
+                return new String(tmp,"UTF-8");
             } else if (!isPad(d3) && isPad(d4)) {
                 b3 = base64Alphabet[d3];
                 if ((b3 & 0x3) != 0)//last 2 bits should be zero
@@ -233,7 +233,7 @@ public final class Base64 {
                 System.arraycopy(decodedData, 0, tmp, 0, i * 3);
                 tmp[encodedIndex++] = (byte) (b1 << 2 | b2 >> 4);
                 tmp[encodedIndex] = (byte) (((b2 & 0xf) << 4) | ((b3 >> 2) & 0xf));
-                return tmp;
+                return new String(tmp,"UTF-8");
             } else {
                 return null;
             }
@@ -246,7 +246,7 @@ public final class Base64 {
 
         }
 
-        return decodedData;
+        return new String(decodedData,"UTF-8");
     }
 
     /**
@@ -269,5 +269,10 @@ public final class Base64 {
             }
         }
         return newSize;
+    }
+
+    @Override
+    public String Sign(String content, String privateKey) throws Exception {
+        return null;
     }
 }

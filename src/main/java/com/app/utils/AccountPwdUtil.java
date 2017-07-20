@@ -1,5 +1,8 @@
 
-package com.app.security;
+package com.app.utils;
+
+import com.app.security.MD5Util;
+import com.app.security.SHAUtil;
 
 import java.util.UUID;
 /**

@@ -1,11 +1,11 @@
-package com.app.security;
+package com.app.utils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.zip.Deflater;
 import java.util.zip.Inflater;
 
-public class CompressUtil {
+public class DataCompressUtil {
 	/**
 	 * 压缩
 	 * 
