@@ -1,6 +1,7 @@
 package com.yz.common.core.utils;
 
 
+import com.yz.common.core.config.Application;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.solr.client.solrj.SolrQuery;
@@ -25,13 +26,14 @@ public class SolrAPI {
 
     private static HttpSolrClient httpSolrClient;
 
-    private static String serverUrl = "http://106.38.75.114:10001/solr/goods_core";
+    private static String serverUrl;
 
     private static final Lock lock = new ReentrantLock();
 
     public static HttpSolrClient getHttpSolrClient() {
         lock.lock();
         if (httpSolrClient == null) {
+            serverUrl = Application.sysConfig.getSolrServerUrl();
             httpSolrClient = new HttpSolrClient(serverUrl);
         }
         lock.unlock();

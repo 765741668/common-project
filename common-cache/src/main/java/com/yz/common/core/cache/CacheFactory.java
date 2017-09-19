@@ -1,7 +1,7 @@
 package com.yz.common.core.cache;
 
 
-import com.yz.common.core.config.Constant;
+import com.yz.common.core.config.Application;
 
 /**
  * 缓存工厂类
@@ -11,7 +11,10 @@ import com.yz.common.core.config.Constant;
 public class CacheFactory {
 
 	private CacheFactory() {
+		init();
 	}
+
+	private int mode = Application.sysConfig.getCacheWay();
 
 	private ICache cache;
 
@@ -25,7 +28,6 @@ public class CacheFactory {
 		if (cache != null) {
 			return;
 		}
-		int mode = Constant.CACHE_MODE;
 		if (mode == 1) {
 			cache = new HashListCache();
 		} else if (mode == 2) {

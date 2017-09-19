@@ -44,11 +44,6 @@ public class BaseDao {
 	private SqlSessionFactory sqlSessionFactory;
 
 
-	/**
-	 * 获取sqlsession对象
-	 *
-	 * @return
-	 */
 	public SqlSession getSqlSession() {
 		return sqlSession;
 	}

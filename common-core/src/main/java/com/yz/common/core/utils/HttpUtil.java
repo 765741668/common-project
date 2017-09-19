@@ -4,14 +4,8 @@ import java.io.*;
 import java.net.SocketTimeoutException;
 import java.net.URI;
 import java.security.KeyStore;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import javax.net.ssl.SSLContext;
-
 import com.yz.common.core.config.Constant;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -32,6 +26,7 @@ import org.apache.http.ssl.SSLContexts;
 import org.apache.http.util.EntityUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.util.CollectionUtils;
 
 /**
  * http常用处理工具类
@@ -85,6 +80,36 @@ public class HttpUtil {
 		httpPost.setEntity(postEntity);
 		httpPost.addHeader("Content-Type", "text/xml");
 		HttpClient client = HttpClients.createDefault();
+		try {
+			HttpResponse response = client.execute(httpPost);
+			HttpEntity entity = response.getEntity();
+			result = EntityUtils.toString(entity, "UTF-8");
+		} catch (ConnectionPoolTimeoutException e) {
+			logger.error("http get throw ConnectionPoolTimeoutException(wait time out)");
+		} catch (ConnectTimeoutException e) {
+			logger.error("http get throw ConnectTimeoutException");
+		} catch (SocketTimeoutException e) {
+			logger.error("http get throw SocketTimeoutException");
+		} catch (Exception e) {
+			logger.error("http get throw Exception");
+		} finally {
+			httpPost.abort();
+		}
+		return result;
+	}
+
+	public static String sendPost(String url, String cnt,Map<String,String> headers) {
+		String result = null;
+		HttpPost httpPost = new HttpPost(url);
+		StringEntity postEntity = new StringEntity(cnt, Constant.DEFAULT_CHARSET_NAME);
+		httpPost.setEntity(postEntity);
+		httpPost.addHeader("Content-Type", "text/xml");
+		HttpClient client = HttpClients.createDefault();
+		if (!CollectionUtils.isEmpty(headers)){
+			headers.forEach((k,v)->{
+				httpPost.addHeader(k,v);
+			});
+		}
 		try {
 			HttpResponse response = client.execute(httpPost);
 			HttpEntity entity = response.getEntity();
@@ -166,6 +191,36 @@ public class HttpUtil {
 		}
 		return null;
 	}
+
+	/**
+	 * 表单提交post请求
+	 * @param url
+	 * @param params
+	 * @return
+	 */
+	public static String sendPostForm(String url,List<NameValuePair> params,Map<String,String> headers){
+		HttpClient client=HttpClients.createDefault();
+		HttpPost post=new HttpPost(url);
+		post.setHeader("ContentType","application/x-www-form-urlencoded;charset=UTF-8");
+
+		if (!CollectionUtils.isEmpty(headers)){
+			headers.forEach((k,v)->{
+				post.addHeader(k,v);
+			});
+		}
+
+		try {
+			UrlEncodedFormEntity entity=new UrlEncodedFormEntity(params, "UTF-8");
+			post.setEntity(entity);
+			HttpResponse response = client.execute(post);
+			String responseEntity=EntityUtils.toString(response.getEntity());
+			return responseEntity;
+		} catch (Exception e) {
+			logger.error("http请求失败 ----",e);
+		}
+		return null;
+	}
+
 	/**
 	 * https请求
 	 * @param certificatePath
@@ -215,10 +270,10 @@ public class HttpUtil {
 	/**
 	 * Get方式获取图片
 	 * @param url
-	 * @param path
+	 * @param path 文件路径
 	 * @return
 	 */
-	public static boolean getFileByGet(String url,String path){
+	public static boolean downloadFile(String url,String path){
 		boolean flag=false;
 		HttpClient client = HttpClients.createDefault();
 		HttpGet get=new HttpGet(url);
@@ -252,4 +307,5 @@ public class HttpUtil {
 		params=params.substring(0, params.length()-1);
 		return params;
 	}
+
 }
