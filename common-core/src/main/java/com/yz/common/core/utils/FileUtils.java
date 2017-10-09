@@ -5,6 +5,8 @@ import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.util.Properties;
+
+import com.yz.common.json.JSON;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import javax.imageio.ImageIO;
@@ -24,7 +26,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 		File file = new File(path);
 		try {
 			String data = readFileToString(file);
-			return JsonUtil.parse(data, clazz);
+			return JSON.iJsonInterface.parseObject(data, clazz);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

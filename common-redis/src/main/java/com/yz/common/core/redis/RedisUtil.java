@@ -8,7 +8,7 @@ import java.util.Properties;
 import java.util.Set;
 
 import com.yz.common.core.utils.FileUtils;
-import com.yz.common.core.utils.JsonUtil;
+import com.yz.common.json.JSON;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -223,7 +223,7 @@ public class RedisUtil {
 	public void lset(String mname, int index, Object obj) {
 		Jedis jedis = this.getJedis();
 		Transaction multi = jedis.multi();
-		multi.lset(mname, index, JsonUtil.parse(obj));
+		multi.lset(mname, index, JSON.iJsonInterface.toJsonString(obj));
 		multi.exec();
 		jedis.close();
 	}

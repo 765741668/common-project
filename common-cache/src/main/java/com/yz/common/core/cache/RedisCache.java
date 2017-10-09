@@ -1,12 +1,10 @@
 package com.yz.common.core.cache;
 
-import com.alibaba.fastjson.JSON;
 import com.yz.common.core.redis.RedisUtil;
-import com.yz.common.core.utils.JsonUtil;
+import com.yz.common.json.JsonUtil;
+import com.yz.common.json.JSON;
 import org.apache.commons.lang.StringUtils;
-
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -16,7 +14,7 @@ import java.util.stream.Collectors;
 
 
 /**
- * Redis 缓存Interface
+ * Redis 缓存
  * Created by yangzhao on 2015/10/13.
  * 添加Stream并行聚合操作 update by yangzhao on 2016/10/14
  */
@@ -29,16 +27,6 @@ public class RedisCache implements ICache {
 	@Override
 	public void set(String key, Object object) {
 		RedisUtil.getInstance().set(key, JsonUtil.parse(object));
-	}
-
-	@Override
-	public void set(String key, int seconds, String value) {
-		RedisUtil.getInstance().setex(key, seconds, value);
-	}
-
-	@Override
-	public void set(String key, int seconds, Object object) {
-		RedisUtil.getInstance().setex(key, seconds, JSON.toJSONString(object));
 	}
 
 	@Override
@@ -87,36 +75,10 @@ public class RedisCache implements ICache {
 		return parse;
 	}
 
-	@SuppressWarnings("rawtypes")
-	@Override
-	public Collection hashGet(String mname, String key, Class collectionClass, Class elementClasses) {
-		String data = RedisUtil.getInstance().hget(mname, key);
-		if(StringUtils.isEmpty(data)){
-			return null;
-		}
-		Collection parse = null;
-		try {
-			parse = JsonUtil.parse(data, collectionClass, elementClasses);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return parse;
-	}
-
 	@Override
 	public String hashGet(String mname, String key) {
 		String data = RedisUtil.getInstance().hget(mname, key);
 		return data;
-	}
-
-	@Override
-	public <T> List<T> hashGet(String mname, String [] keys, Class<T> clazz) {
-		List<String> data = RedisUtil.getInstance().hmget(mname, keys);
-		List<T> collect = data.stream().map(d -> {
-			T parse = JsonUtil.parse(d, clazz);
-			return parse;
-		}).collect(Collectors.toList());
-		return collect;
 	}
 
 	@Override
@@ -159,23 +121,20 @@ public class RedisCache implements ICache {
 		RedisUtil.getInstance().rpush(mname,datas);
 	}
 
-	public boolean listIsExist(String mname){
-		return RedisUtil.getInstance().exist(mname);
-	}
 	@Override
 	public <T>List<T> listGet(String mname,Class<T> clazz) {
 		List<String> list = RedisUtil.getInstance().getList(mname);
 		if(list.isEmpty()){
 			return null;
 		}
-		ArrayList<T> objects = list.stream().map(t -> JsonUtil.parse(t, clazz))
-				.collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
+		List<T> objects = list.stream().map(t -> JsonUtil.parse(t,clazz)).collect(Collectors.toList());
 		return objects;
 	}
 
 	@Override
 	public <T> void listRemove(String mname, T value) {
-		//RedisUtil.getInstance().delList(mname, 0, value);
+		String jsonString = JSON.iJsonInterface.toJsonString(value);
+		RedisUtil.getInstance().delList(mname, 0,jsonString);
 	}
 
 	@Override
@@ -184,31 +143,10 @@ public class RedisCache implements ICache {
 	}
 
 	@Override
-	public List<String> listGet(String mname, int pageNo, int pageSize) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public <T> void removeListAdd(String mname, List<T> list) {
-		RedisUtil.getInstance().remove(mname);
-		this.listAdd(mname, list);
-	}
-
-	@Override
-	public <T> boolean listKeyReplaceValue(String mname, int index, T t) {
-		try{
-			RedisUtil.getInstance().lset(mname, index, t);
-		}catch(Exception e){
-			return false;
-		}
-		return true;
-	}
-
-	@Override
 	public void listAdd(String mname,Object t) {
+		String jsonString = JSON.iJsonInterface.toJsonString(t);
 		if(t!=null){
-			RedisUtil.getInstance().rpush(mname,JsonUtil.parse(t));
+			RedisUtil.getInstance().rpush(mname,jsonString);
 		}
 	}
 

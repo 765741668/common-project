@@ -1,9 +1,8 @@
 package com.yz.common.core.queue.jdk;
 
-import com.yz.common.core.config.Constant;
 import com.yz.common.core.queue.IMessageQueue;
 import com.yz.common.core.queue.QueueHandler;
-import com.yz.common.core.utils.JsonUtil;
+import com.yz.common.json.JsonUtil;
 import org.springframework.stereotype.Component;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
@@ -14,6 +13,8 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 @Component("jMessageQueue")
 public class JMessageQueue implements IMessageQueue {
+
+    private final int BLOCKINGQUEUE_SIZE = 1000;
 
     private final ConcurrentHashMap<String,ArrayBlockingQueue> map = new ConcurrentHashMap();
     /**
@@ -26,7 +27,7 @@ public class JMessageQueue implements IMessageQueue {
     public synchronized boolean publish (String channel, Object o){
         ArrayBlockingQueue queue = map.get(channel);
         if (queue == null){
-            queue = new ArrayBlockingQueue(Constant.BLOCKINGQUEUE_SIZE,true);
+            queue = new ArrayBlockingQueue(BLOCKINGQUEUE_SIZE,true);
         }
         queue.add(o);
         map.put(channel, queue);
@@ -40,7 +41,7 @@ public class JMessageQueue implements IMessageQueue {
     public synchronized void subscribe(String channel, QueueHandler queueHandler) {
         ArrayBlockingQueue queue = map.get(channel);
         if (queue==null){
-            queue = new ArrayBlockingQueue(Constant.BLOCKINGQUEUE_SIZE,true);
+            queue = new ArrayBlockingQueue(BLOCKINGQUEUE_SIZE,true);
             map.put(channel,queue);
         }
         final ArrayBlockingQueue abq = queue;
@@ -65,7 +66,7 @@ public class JMessageQueue implements IMessageQueue {
     public synchronized void put(String channel, Object o) throws InterruptedException {
         ArrayBlockingQueue queue = map.get(channel);
         if (queue == null){
-            queue = new ArrayBlockingQueue(Constant.BLOCKINGQUEUE_SIZE,true);
+            queue = new ArrayBlockingQueue(BLOCKINGQUEUE_SIZE,true);
         }
         queue.put(o);
         map.put(channel,queue);

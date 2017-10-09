@@ -1,4 +1,4 @@
-package com.yz.common.core.utils;
+package com.yz.common.json;
 
 import java.io.IOException;
 import java.util.Collection;

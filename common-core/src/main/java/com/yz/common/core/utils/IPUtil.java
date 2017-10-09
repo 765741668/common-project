@@ -1,5 +1,6 @@
 package com.yz.common.core.utils;
 
+import com.yz.common.json.JSON;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -22,7 +23,7 @@ public class IPUtil {
      */
     public static Map query(String ip){
         String request = HttpUtil.getRequest(SINA_API+ip);
-        HashMap responseData = JsonUtil.parse(request, HashMap.class);
+        HashMap responseData = JSON.iJsonInterface.parseObject(request, HashMap.class);
         Set set = responseData.keySet();
         Iterator iterator = set.iterator();
         while (iterator.hasNext()){

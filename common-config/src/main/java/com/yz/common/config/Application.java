@@ -1,4 +1,4 @@
-package com.yz.common.core.config;
+package com.yz.common.config;
 
 /**
  * 应用

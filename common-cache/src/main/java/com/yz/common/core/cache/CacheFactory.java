@@ -1,7 +1,7 @@
 package com.yz.common.core.cache;
 
 
-import com.yz.common.core.config.Application;
+import com.yz.common.config.Application;
 
 /**
  * 缓存工厂类

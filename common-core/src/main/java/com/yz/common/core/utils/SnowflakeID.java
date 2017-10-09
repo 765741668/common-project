@@ -1,6 +1,7 @@
 package com.yz.common.core.utils;
 
-import com.yz.common.core.config.Application;
+
+import com.yz.common.config.Application;
 
 /**
  * 推特 雪花ID生成器

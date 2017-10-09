@@ -14,6 +14,8 @@ public class HashListCache implements ICache {
 
 	private static final Map<String, Map<String, Object>> bigMapMap = new ConcurrentHashMap<>();
 
+	private static final Map<String, Map<String, Object>> bigObjectMap = new ConcurrentHashMap<>();
+
 	@SuppressWarnings("rawtypes")
 	private static final Map<String, CopyOnWriteArrayList> bigListMap = new ConcurrentHashMap<String,CopyOnWriteArrayList>();
 
@@ -24,16 +26,6 @@ public class HashListCache implements ICache {
 
 	@Override
 	public void set(String key, Object object) {
-
-	}
-
-	@Override
-	public void set(String key, int seconds, String value) {
-
-	}
-
-	@Override
-	public void set(String key, int seconds, Object object) {
 
 	}
 
@@ -70,18 +62,7 @@ public class HashListCache implements ICache {
 	}
 
 	@Override
-	public Collection hashGet(String mname, String key, Class collectionClass, Class elementClasses) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public String hashGet(String mname, String key) {
-		return null;
-	}
-
-	@Override
-	public <T> List<T> hashGet(String mname,String [] keys, Class<T> clazz) {
 		return null;
 	}
 
@@ -120,11 +101,6 @@ public class HashListCache implements ICache {
 		listGet.addAll(list);
 	}
 
-	@Override
-	public List<String> listGet(String mname, int pageNo, int pageSize) {
-		return null;
-	}
-
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T> List<T> listGet(String mname, Class<T> clazz) {
@@ -136,10 +112,6 @@ public class HashListCache implements ICache {
 		return list;
 	}
 
-	@Override
-	public boolean listIsExist(String mname) {
-		return bigListMap.containsKey(mname);
-	}
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -153,24 +125,6 @@ public class HashListCache implements ICache {
 	@Override
 	public void listRemove(String mname) {
 		bigListMap.remove(mname);
-	}
-
-	@Override
-	public <T> void removeListAdd(String mname, List<T> list) {
-		bigListMap.put(mname, new CopyOnWriteArrayList(list.toArray()));
-	}
-
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	@Override
-	public <T> boolean listKeyReplaceValue(String mname, int index, T t) {
-		List list = bigListMap.get(mname);
-		try {
-			list.set(index, t);
-		} catch (Exception e) {
-			return false;
-		}
-
-		return true;
 	}
 
 	@Override

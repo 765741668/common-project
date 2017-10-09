@@ -1,7 +1,7 @@
 package com.yz.common.pay.service;
 
-import com.alibaba.fastjson.JSON;
 import com.yz.common.core.utils.*;
+import com.yz.common.json.JSON;
 import com.yz.common.pay.bean.WXCreateOrderParams;
 import com.yz.common.pay.bean.WXPayParams;
 import com.yz.common.pay.bean.WXRefundParams;
@@ -27,7 +27,7 @@ public class WXPay implements IPay {
 		params.add(new BasicNameValuePair("nonce_str", genNonceStr()));
 		params.add(new BasicNameValuePair("body", wxCreateOrderParams.getBody()));
 
-		params.add(new BasicNameValuePair("attach", JSON.toJSONString(wxCreateOrderParams.getAttach())));
+		params.add(new BasicNameValuePair("attach", JSON.iJsonInterface.toJsonString(wxCreateOrderParams.getAttach())));
 		params.add(new BasicNameValuePair("out_trade_no", wxCreateOrderParams.getOutTradeNo()));
 		params.add(new BasicNameValuePair("total_fee", String.valueOf((int)(wxCreateOrderParams.getTotalFee()*100))));
 		params.add(new BasicNameValuePair("spbill_create_ip", wxCreateOrderParams.getSpbillCreateIp()));

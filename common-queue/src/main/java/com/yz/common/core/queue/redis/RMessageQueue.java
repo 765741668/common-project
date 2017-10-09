@@ -1,9 +1,9 @@
 package com.yz.common.core.queue.redis;
 
-import com.alibaba.fastjson.JSON;
 import com.yz.common.core.queue.IMessageQueue;
 import com.yz.common.core.queue.QueueHandler;
 import com.yz.common.core.redis.RedisUtil;
+import com.yz.common.json.JSON;
 import org.springframework.stereotype.Component;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPubSub;
@@ -17,7 +17,8 @@ public class RMessageQueue implements IMessageQueue {
     @Override
     public boolean publish(String channel, Object o) {
         Jedis jedis = RedisUtil.getInstance().getJedis();
-        Long publisher = jedis.publish(channel, JSON.toJSONString(o));
+        String jsonString = JSON.iJsonInterface.toJsonString(o);
+        Long publisher = jedis.publish(channel,jsonString);
         logger.info("订阅该频道的人数：" + publisher);
         jedis.close();
         return true;

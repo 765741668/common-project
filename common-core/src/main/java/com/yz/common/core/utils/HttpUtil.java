@@ -6,7 +6,8 @@ import java.net.URI;
 import java.security.KeyStore;
 import java.util.*;
 import javax.net.ssl.SSLContext;
-import com.yz.common.core.config.Constant;
+
+import com.yz.common.config.Application;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -37,6 +38,8 @@ public class HttpUtil {
 
 	private static final Logger logger=LogManager.getLogger(HttpUtil.class);
 
+	private final static String CHARSET_NAME = Application.sysConfig.getCharsetName();
+
 
 	public static String getRequest(String url) {
 		try {
@@ -44,7 +47,7 @@ public class HttpUtil {
 			HttpGet request = new HttpGet(url);
 			HttpResponse response = client.execute(request);
 			HttpEntity entity =  response.getEntity();
-			String result = EntityUtils.toString(entity, Constant.DEFAULT_CHARSET_NAME);
+			String result = EntityUtils.toString(entity,CHARSET_NAME);
 			return result;
 		} catch (Exception e) {
 			logger.error("http req error", e);
@@ -57,7 +60,7 @@ public class HttpUtil {
 			HttpClient client = HttpClients.createDefault();
 			HttpPost post = new HttpPost(url);
 			if(params!=null){
-				post.setEntity(new UrlEncodedFormEntity(params, Constant.DEFAULT_CHARSET_NAME));
+				post.setEntity(new UrlEncodedFormEntity(params, CHARSET_NAME));
 			}
 			HttpResponse response = client.execute(post);
 			BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
@@ -76,7 +79,7 @@ public class HttpUtil {
 	public static String sendPost(String url, String cnt) {
 		String result = null;
 		HttpPost httpPost = new HttpPost(url);
-		StringEntity postEntity = new StringEntity(cnt, Constant.DEFAULT_CHARSET_NAME);
+		StringEntity postEntity = new StringEntity(cnt,CHARSET_NAME);
 		httpPost.setEntity(postEntity);
 		httpPost.addHeader("Content-Type", "text/xml");
 		HttpClient client = HttpClients.createDefault();
@@ -101,7 +104,7 @@ public class HttpUtil {
 	public static String sendPost(String url, String cnt,Map<String,String> headers) {
 		String result = null;
 		HttpPost httpPost = new HttpPost(url);
-		StringEntity postEntity = new StringEntity(cnt, Constant.DEFAULT_CHARSET_NAME);
+		StringEntity postEntity = new StringEntity(cnt,CHARSET_NAME);
 		httpPost.setEntity(postEntity);
 		httpPost.addHeader("Content-Type", "text/xml");
 		HttpClient client = HttpClients.createDefault();
@@ -159,7 +162,7 @@ public class HttpUtil {
 				uri = "?".concat(uri);
 			}
 			HashMap<String, String> map = new HashMap<String, String>();
-			List<NameValuePair> parse = URLEncodedUtils.parse(new URI(uri), Constant.DEFAULT_CHARSET_NAME);
+			List<NameValuePair> parse = URLEncodedUtils.parse(new URI(uri),CHARSET_NAME);
 			for (NameValuePair nameValuePair : parse) {
 				map.put(nameValuePair.getName(), nameValuePair.getValue());
 			}
