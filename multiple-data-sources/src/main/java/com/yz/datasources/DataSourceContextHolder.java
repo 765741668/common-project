@@ -1,4 +1,4 @@
-package com.yz.datasources;
+package com.huamai.datasources;
 
 /**
  * Created by yangzhao on 17/2/7.

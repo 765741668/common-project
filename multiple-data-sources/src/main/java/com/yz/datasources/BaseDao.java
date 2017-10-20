@@ -1,6 +1,8 @@
-package com.yz.datasources;
+package com.huamai.datasources;
 
-import com.yz.common.core.utils.StringUtils;
+import com.app.cache.CacheFactory;
+import com.app.cache.ICache;
+import com.app.utils.StringUtils;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.logging.log4j.LogManager;
@@ -26,6 +28,8 @@ public class BaseDao {
 
 	public static final Logger logger= LogManager.getLogger(BaseDao.class);
 
+	public ICache iCache = CacheFactory.getInstance().getDefault();
+
 	@Resource(name = "jdbcTemplate")
 	private JdbcTemplate jdbcTemplate;
 
@@ -43,7 +47,15 @@ public class BaseDao {
 	@Resource(name = "sqlSessionFactory")
 	private SqlSessionFactory sqlSessionFactory;
 
+	public BaseDao(){
+		CacheFactory.getInstance().init();
+	}
 
+	/**
+	 * 获取sqlsession对象
+	 *
+	 * @return
+	 */
 	public SqlSession getSqlSession() {
 		return sqlSession;
 	}

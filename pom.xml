@@ -16,6 +16,7 @@
         <module>common-pay</module>
         <module>common-json</module>
         <module>common-config</module>
+        <module>common-gateway</module>
     </modules>
     <packaging>pom</packaging>
 

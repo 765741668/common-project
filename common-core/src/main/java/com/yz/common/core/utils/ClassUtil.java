@@ -1,12 +1,24 @@
 package com.yz.common.core.utils;
 
 
+import javassist.ClassPool;
+import javassist.CtClass;
+import javassist.CtMethod;
+import javassist.Modifier;
+import javassist.bytecode.CodeAttribute;
+import javassist.bytecode.LocalVariableAttribute;
+import javassist.bytecode.MethodInfo;
+import org.springframework.util.ClassUtils;
+
+import java.lang.reflect.Method;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by yangzhao on 17/8/2.
  */
-public class ClassUtil {
+public class ClassUtil extends ClassUtils {
 
     /**
      * 对象属性解析生成对应类型的值
@@ -59,4 +71,36 @@ public class ClassUtil {
         String s = StringUtils.firstCharToUpper(fieldName);
         return symbol+s;
     }
+
+    /**
+     * 基于javassist获取类方法参数名称
+     * @param method
+     * @return
+     * @throws Exception
+     */
+    public static String[] getMethodParamsName(Method method) throws Exception{
+        Class<?> clazz = method.getDeclaringClass();
+        ClassPool pool = ClassPool.getDefault();
+        CtClass clz = pool.get(clazz.getName());
+        CtClass[] params = new CtClass[method.getParameterTypes().length];
+        for (int i = 0; i < method.getParameterTypes().length; i++) {
+            params[i] = pool.getCtClass(method.getParameterTypes()[i].getName());
+        }
+        CtMethod cm = clz.getDeclaredMethod(method.getName(), params);
+        MethodInfo methodInfo = cm.getMethodInfo();
+        CodeAttribute codeAttribute = methodInfo.getCodeAttribute();
+        if (codeAttribute==null)
+            return null;
+        LocalVariableAttribute attr = (LocalVariableAttribute) codeAttribute
+                .getAttribute(LocalVariableAttribute.tag);
+        int pos = Modifier.isStatic(cm.getModifiers()) ? 0 : 1;
+        String[] paramNames = new String[cm.getParameterTypes().length];
+        if (attr==null)
+            return null;
+        for (int i = 0; i < paramNames.length; i++) {
+            paramNames[i] = attr.variableName(i + pos);
+        }
+        return paramNames;
+    }
+
 }

@@ -1,4 +1,4 @@
-package com.yz.datasources;
+package com.huamai.datasources;
 
 import java.lang.annotation.*;
 
