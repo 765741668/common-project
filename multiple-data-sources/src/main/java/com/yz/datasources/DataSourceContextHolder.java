@@ -1,7 +1,9 @@
-package com.huamai.datasources;
+package com.yz.datasources;
 
 /**
- * Created by yangzhao on 17/2/7.
+ * 该类内部维护了{@link ThreadLocal}
+ * @author yangzhao
+ * Created by 17/2/7.
  */
 public class DataSourceContextHolder {
 

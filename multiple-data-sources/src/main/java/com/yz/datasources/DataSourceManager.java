@@ -1,9 +1,7 @@
-package com.huamai.datasources;
+package com.yz.datasources;
 
-import org.apache.commons.lang.ArrayUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.aspectj.lang.JoinPoint;
 import org.reflections.Reflections;
 import org.reflections.scanners.MethodAnnotationsScanner;
 import org.reflections.util.ClasspathHelper;
@@ -25,7 +23,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * 数据源切换
+ * 数据源切换管理类
+ *
  * @author yangzhao
  * Created by  17/2/7.
  */
@@ -33,18 +32,29 @@ import java.util.stream.Collectors;
 public class DataSourceManager implements BeanFactoryPostProcessor {
 
     private final Logger logger = LogManager.getLogger(DataSourceManager.class);
-
+    /**
+     * 扫描包
+     * 一般项目都是以com开头所以这里默认为com
+     */
     private String pacakgePath = "com";
 
     @Override
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
         //getconfigs
         List<String> configs = getconfigs().stream().collect(Collectors.toList());
+
+        //打印所有生成的expression配置信息
         configs.forEach(s -> logger.info(s));
+
         //设置aop信息
         setAopInfo(configs,beanFactory);
     }
 
+    /**
+     * 设置注册bean动态AOP信息
+     * @param configs
+     * @param beanFactory
+     */
     private void setAopInfo(List<String> configs, ConfigurableListableBeanFactory beanFactory) {
 
         if (beanFactory instanceof BeanDefinitionRegistry){
@@ -70,24 +80,28 @@ public class DataSourceManager implements BeanFactoryPostProcessor {
     public Set<String> getconfigs() {
         Set<String> configs = new HashSet<>();
         Reflections reflections = new Reflections(new ConfigurationBuilder().addUrls(ClasspathHelper.forPackage(pacakgePath)));
-//        Reflections reflections = null;
+        //获取所有标记@DataSource的类
         Set<Class<?>> typesAnnotatedWith = reflections.getTypesAnnotatedWith(DataSource.class);
         Iterator<Class<?>> iterator = typesAnnotatedWith.iterator();
         while (iterator.hasNext()){
             Class<?> next = iterator.next();
+            //获取该类所有方法
             Method[] declaredMethods = next.getDeclaredMethods();
             for (Method method:declaredMethods){
                 String classAndMethod = method.getDeclaringClass().getCanonicalName()+"."+method.getName();
+                //生成expression配置
                 String expression = "execution (* "+classAndMethod+"(..))";
                 configs.add(expression);
             }
         }
         reflections = new Reflections(new ConfigurationBuilder().setUrls(ClasspathHelper.forPackage(pacakgePath)).setScanners(new MethodAnnotationsScanner()));
+        //获取所有类中标记@DataSource的方法
         Set<Method> methodsAnnotatedWith = reflections.getMethodsAnnotatedWith(DataSource.class);
         Iterator<Method> it = methodsAnnotatedWith.iterator();
         while (it.hasNext()){
             Method method = it.next();
             String classAndMethod = method.getDeclaringClass().getCanonicalName()+"."+method.getName();
+            //生成expression配置
             String expression = "execution (* "+classAndMethod+"(..))";
             configs.add(expression);
         }

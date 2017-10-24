@@ -88,16 +88,9 @@
             <version>${poi.version}</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/org.javassist/javassist -->
-        <dependency>
-            <groupId>org.javassist</groupId>
-            <artifactId>javassist</artifactId>
-            <version>3.22.0-GA</version>
-        </dependency>
-
     </dependencies>
 
     <build>
-        <finalName>common-core</finalName>
+        <finalName>${artifactId}</finalName>
     </build>
 </project>

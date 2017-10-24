@@ -1,4 +1,4 @@
-package com.huamai.datasources;
+package com.yz.datasources;
 
 import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
 

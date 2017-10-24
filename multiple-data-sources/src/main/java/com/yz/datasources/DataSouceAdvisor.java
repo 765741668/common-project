@@ -1,15 +1,15 @@
-package com.huamai.datasources;
+package com.yz.datasources;
 
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
-import org.apache.commons.lang.ArrayUtils;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
 
 /**
  * 增强类
- *
+ * 实现MethodInterceptor接口，通过反射动态解析方法是否标注@DataSource {@link DataSource}注解。
+ * 如果已标注@DataSource注解取值，set到{@link DataSourceContextHolder}
  * @author yangzhao
  *         create by 17/10/20
  */

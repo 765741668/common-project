@@ -1,8 +1,8 @@
-package com.huamai.datasources;
+package com.yz.datasources;
 
-import com.app.cache.CacheFactory;
-import com.app.cache.ICache;
-import com.app.utils.StringUtils;
+import com.yz.common.core.cache.CacheFactory;
+import com.yz.common.core.cache.ICache;
+import com.yz.common.core.utils.StringUtils;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.logging.log4j.LogManager;
