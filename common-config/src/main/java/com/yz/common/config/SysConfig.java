@@ -20,7 +20,7 @@ public class SysConfig {
     //缓存方式
     private int cacheWay;
     //fastjson和jackson两种 1=fastjson 2=jackson
-    private int  json;
+    private int  json = 1;
     //编码方式
     private String charsetName = "UTF-8";
 

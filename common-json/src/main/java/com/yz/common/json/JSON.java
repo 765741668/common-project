@@ -14,7 +14,10 @@ public final class JSON {
     public static final IJsonInterface iJsonInterface;
 
     static {
-        int json = Application.sysConfig.getJson();
+        int json = 1;
+        if (Application.sysConfig!=null){
+            json = Application.sysConfig.getJson();
+        }
         switch (json){
             case 1:
                 iJsonInterface = new FastJson();
