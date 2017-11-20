@@ -150,38 +150,71 @@ public class DateUtils {
 	 */
 	public static Date getFirstDayOfWeek(Date date) {
 		GregorianCalendar gc = (GregorianCalendar) Calendar.getInstance();
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		try {
-			Date result = sdf.parse(sdf.format(date));
-			gc.setTime(result);
-			switch (gc.get(Calendar.DAY_OF_WEEK)) {
-			case (Calendar.SUNDAY):
-				gc.add(Calendar.DATE, -6);
-				break;
-			case (Calendar.MONDAY):
-				gc.add(Calendar.DATE, 0);
-				break;
-			case (Calendar.TUESDAY):
-				gc.add(Calendar.DATE, -1);
-				break;
-			case (Calendar.WEDNESDAY):
-				gc.add(Calendar.DATE, -2);
-				break;
-			case (Calendar.THURSDAY):
-				gc.add(Calendar.DATE, -3);
-				break;
-			case (Calendar.FRIDAY):
-				gc.add(Calendar.DATE, -4);
-				break;
-			case (Calendar.SATURDAY):
-				gc.add(Calendar.DATE, -5);
-				break;
-			}
-		} catch (ParseException e) {
-			e.printStackTrace();
+		gc.setTime(date);
+		int i = gc.get(Calendar.DAY_OF_WEEK);
+		if (i==1){
+			i=-6;
+		}else{
+			i = 2-i;
 		}
-
+		gc.add(Calendar.DAY_OF_WEEK,i);
+		gc.set(Calendar.HOUR_OF_DAY,00);
+		gc.set(Calendar.MINUTE,00);
+		gc.set(Calendar.SECOND,00);
+		gc.set(Calendar.MILLISECOND,00);
 		return gc.getTime();
+	}
+
+	/**
+	 * 得到输入日期这个月的第一天
+	 *
+	 * @param date
+	 * @return
+	 */
+	public static Date getFirstDayOfMonth(Date date) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		calendar.add(Calendar.MONTH,0);
+		calendar.set(Calendar.DAY_OF_MONTH,1);
+		calendar.set(Calendar.HOUR_OF_DAY,00);
+		calendar.set(Calendar.MINUTE,00);
+		calendar.set(Calendar.SECOND,00);
+		calendar.set(Calendar.MILLISECOND,00);
+		return calendar.getTime();
+	}
+
+	/**
+	 * 根据传入的时间获取周最后一天（23：59：59 999）
+	 * @param date
+	 * @return
+	 */
+	public static Date getLastDayOfWeek(Date date) {
+		Date firstDayOfWeek = getFirstDayOfWeek(date);
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(firstDayOfWeek);
+		calendar.add(Calendar.DAY_OF_WEEK,6);
+		calendar.set(Calendar.HOUR_OF_DAY,23);
+		calendar.set(Calendar.MINUTE,59);
+		calendar.set(Calendar.SECOND,59);
+		calendar.set(Calendar.MILLISECOND,999);
+		return calendar.getTime();
+	}
+
+	/**
+	 * 根据传入的时间获取当月最后一天（23：59：59 999）
+	 * @param date
+	 * @return
+	 */
+	public static Date getLastDayOfMonth(Date date) {
+		Date firstDayOfMonth = getFirstDayOfMonth(date);
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(firstDayOfMonth);
+		calendar.set(Calendar.DAY_OF_MONTH,calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
+		calendar.set(Calendar.HOUR_OF_DAY,23);
+		calendar.set(Calendar.MINUTE,59);
+		calendar.set(Calendar.SECOND,59);
+		calendar.set(Calendar.MILLISECOND,999);
+		return calendar.getTime();
 	}
 
 	/**
@@ -219,9 +252,8 @@ public class DateUtils {
 
 	/**
 	 * 获取间隔一定分钟的日期
-	 * 
 	 * @param date
-	 * @param day
+	 * @param minute
 	 * @return
 	 */
 	public static Date getIntervalMinute(Date date, int minute) {
